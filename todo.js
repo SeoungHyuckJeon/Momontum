@@ -4,7 +4,18 @@ const toDoForm = document.querySelector(".js-toDoForm"),
 
 const TODOS_LS = 'toDos';
 
-const toDos = [];
+let toDos = [];
+
+function deleteToDo(event) {
+    const btn = event.target;
+    const li = btn.parentNode;
+    toDoList.removeChild(li);
+    const cleanToDos = toDos.filter(function(toDo) {
+        return toDo.id !== parseInt(li.id);
+    });
+    toDos = cleanToDos;                                 //수정하기 전의 이전값인 toDos를 수정한 cleanToDos배열로 교체함
+    saveToDos();                                        //수정한 toDos를 저장함
+}
 
 function saveToDos() {                                  //toDos를 LocalStorage에 저장하기 위한 함수
     localStorage.setItem(TODOS_LS,JSON.stringify(toDos));       //JSON.stringify는 js 오브젝트를 String형으로 바꿔주는 함수임
@@ -16,6 +27,7 @@ function paintToDo(text) {
     const span = document.createElement("span");        //가로로 컴포넌트들을 나열함
     const newId = toDos.length+1;                       //배열의 다음 id의 값
     delBtn.textContent = "❌";                          //버튼 문구를 x로 설정
+    delBtn.addEventListener("click",deleteToDo);
     span.textContent = text;                            //span의 내용을 매개변수로 받은 text로 설정함
     li.appendChild(delBtn);                             //리스트의 하위 개체로 버튼을 추가함
     li.appendChild(span);                               //리스트의 하위 개체로 span을 추가함
